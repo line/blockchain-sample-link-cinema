@@ -1,0 +1,999 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is sample dapp to provide trials of LBD service",
+        "title": "Link Cinema API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "0.1"
+    },
+    "basePath": "/api/v0",
+    "paths": {
+        "/test/config": {
+            "get": {
+                "description": "Show a config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "test"
+                ],
+                "summary": "Show a config",
+                "responses": {
+                    "200": {
+                        "description": "Server Configuration",
+                        "schema": {
+                            "$ref": "#/definitions/config.APIConfig"
+                        }
+                    }
+                }
+            }
+        },
+        "/test/init": {
+            "get": {
+                "description": "Transfer tokens to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "test"
+                ],
+                "summary": "Init asset for test user",
+                "responses": {
+                    "200": {
+                        "description": "transaction hashes has executed",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/test/transaction": {
+            "get": {
+                "description": "Retrieve a Transaction using its hash",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "test"
+                ],
+                "summary": "Get a transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction hash used for searching",
+                        "name": "txhash",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction with the provided hash",
+                        "schema": {
+                            "$ref": "#/definitions/service.Transaction"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket": {
+            "get": {
+                "description": "Retrieve a purchase info about given movie ticket",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Get a purchase info",
+                "responses": {
+                    "200": {
+                        "description": "Ticket info",
+                        "schema": {
+                            "$ref": "#/definitions/service.PurchaseInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/purchase": {
+            "post": {
+                "description": "Request user to transfer token at LBW",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Request user to purchase",
+                "parameters": [
+                    {
+                        "description": "Purchase info",
+                        "name": "purchase_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.PurchaseInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Session token and redirect url to transfer token",
+                        "schema": {
+                            "$ref": "#/definitions/service.TransferRequestResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/purchase/commit/{baseCoinTransferToken}/{:movieTokenTransferToken}": {
+            "post": {
+                "description": "Commit transactions to purchase movie-ticket token and mint a movie-ticket token to user wallet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Commit a purchasing movie-ticket token",
+                "parameters": [
+                    {
+                        "description": "Purchase info",
+                        "name": "purchase_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.PurchaseInfo"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Base coin transfer session Token",
+                        "name": "baseCoinTransferToken",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Base coin transfer session Token",
+                        "name": "movieTokenTransferToken",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction hashes has executed",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/purchase/extra": {
+            "post": {
+                "description": "Request user to transfer movie-token used for discounting ticket price",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ticket"
+                ],
+                "summary": "Request user to purchase extra token",
+                "parameters": [
+                    {
+                        "description": "Purchase info",
+                        "name": "purchase_info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/service.PurchaseInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Session token and redirect url to transfer a token",
+                        "schema": {
+                            "$ref": "#/definitions/service.TransferRequestResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/token/balance/base-coin": {
+            "get": {
+                "description": "Retrieve a base coin balance and summary by user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Get a base coin balance",
+                "responses": {
+                    "200": {
+                        "description": "Base coin balance and summary by user",
+                        "schema": {
+                            "$ref": "#/definitions/controller.BaseCoinBalance"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/token/balance/movie": {
+            "get": {
+                "description": "Retrieve a movie token balance and summary by user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Get a movie token balance",
+                "responses": {
+                    "200": {
+                        "description": "Movie token balance and summary by user",
+                        "schema": {
+                            "$ref": "#/definitions/controller.MovieTokenBalance"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/token/balance/movie-discount": {
+            "get": {
+                "description": "Retrieve a movie-discount token balance and summary by user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Get a movie-discount token balance",
+                "responses": {
+                    "200": {
+                        "description": "Movie-Discount token and summary by user",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/controller.MovieDiscountBalance"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/token/balance/movie-ticket": {
+            "get": {
+                "description": "Retrieve movie-ticket token balance and summary using its token index",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "token"
+                ],
+                "summary": "Get a movie-ticket token balance",
+                "responses": {
+                    "200": {
+                        "description": "Movie-ticket token balance and summary with provided token index",
+                        "schema": {
+                            "$ref": "#/definitions/controller.MovieTicketBalance"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "get": {
+                "description": "retrieve URL to login through LINE",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Login to LINE",
+                "responses": {
+                    "200": {
+                        "description": "URL to redirect login page",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/proxy": {
+            "get": {
+                "description": "Request user to set proxy to delegate managing item tokens by service",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Request user to set proxy",
+                "responses": {
+                    "200": {
+                        "description": "Session token and redirect url to set proxy",
+                        "schema": {
+                            "$ref": "#/definitions/service.TransferRequestResult"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/proxy/commit/{proxyToken}": {
+            "get": {
+                "description": "Commit a request of setting proxy",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Commit a request of setting proxy",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Proxy session token",
+                        "name": "proxyToken",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction hash has executed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "config.APIConfig": {
+            "type": "object",
+            "properties": {
+                "apiKey": {
+                    "type": "string"
+                },
+                "apiSecret": {
+                    "type": "string"
+                },
+                "channel-id": {
+                    "type": "string"
+                },
+                "channelSecret": {
+                    "type": "string"
+                },
+                "endpoint": {
+                    "type": "string"
+                },
+                "fungibleTokenType": {
+                    "type": "string"
+                },
+                "itemContract-id": {
+                    "type": "string"
+                },
+                "lbd-api-endpoint": {
+                    "type": "string"
+                },
+                "line-api-endpoint": {
+                    "type": "string"
+                },
+                "lineAccessEndpoint": {
+                    "type": "string"
+                },
+                "non-fungibleTokenType": {
+                    "type": "string"
+                },
+                "serviceContract-id": {
+                    "type": "string"
+                },
+                "user-id": {
+                    "type": "string"
+                },
+                "walletAddress": {
+                    "type": "string"
+                },
+                "walletSecret": {
+                    "type": "string"
+                }
+            }
+        },
+        "controller.BaseCoinBalance": {
+            "type": "object",
+            "properties": {
+                "coinInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.BaseCoinBalance"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Transaction"
+                    }
+                },
+                "userInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.UserInfo"
+                }
+            }
+        },
+        "controller.MovieDiscountBalance": {
+            "type": "object",
+            "properties": {
+                "tokenInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.FungibleBalance"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Transaction"
+                    }
+                },
+                "userInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.UserInfo"
+                }
+            }
+        },
+        "controller.MovieTicketBalance": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "tokens": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/controller.MovieTicketToken"
+                    }
+                }
+            }
+        },
+        "controller.MovieTicketToken": {
+            "type": "object",
+            "properties": {
+                "movieInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.MovieInfo"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "paymentInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.PaymentInfo"
+                },
+                "ticketInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.TicketInfo"
+                },
+                "tokenId": {
+                    "type": "string"
+                },
+                "transactions": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.NonFungibleTxHistory"
+                }
+            }
+        },
+        "controller.MovieTokenBalance": {
+            "type": "object",
+            "properties": {
+                "tokenInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.ServiceTokenBalance"
+                },
+                "transactions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Transaction"
+                    }
+                },
+                "userInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.UserInfo"
+                }
+            }
+        },
+        "service.Amount": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "denom": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Attribute": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.BaseCoinBalance": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "decimals": {
+                    "type": "integer"
+                },
+                "symbol": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Event": {
+            "type": "object",
+            "properties": {
+                "attributes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Attribute"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Fee": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Amount"
+                    }
+                },
+                "gas": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.FungibleBalance": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "meta": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tokenType": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Log": {
+            "type": "object",
+            "properties": {
+                "events": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Event"
+                    }
+                },
+                "log": {
+                    "type": "string"
+                },
+                "msg_index": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "service.Message": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "object"
+                }
+            }
+        },
+        "service.MovieInfo": {
+            "type": "object",
+            "properties": {
+                "country": {
+                    "type": "string"
+                },
+                "genre": {
+                    "type": "string"
+                },
+                "runningTime": {
+                    "type": "integer"
+                },
+                "score": {
+                    "type": "number"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.NonFungibleTxHistory": {
+            "type": "object",
+            "properties": {
+                "mintTransaction": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.Transaction"
+                },
+                "paymentTransaction": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.Transaction"
+                },
+                "pointTransaction": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.Transaction"
+                }
+            }
+        },
+        "service.PaymentInfo": {
+            "type": "object",
+            "properties": {
+                "paymentDate": {
+                    "type": "string"
+                },
+                "paymentTransaction": {
+                    "type": "string"
+                },
+                "pointTransaction": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.PriceInfo": {
+            "type": "object",
+            "properties": {
+                "discount": {
+                    "type": "integer"
+                },
+                "grandTotal": {
+                    "type": "integer"
+                },
+                "subTotal": {
+                    "type": "integer"
+                },
+                "usedFungible": {
+                    "type": "integer"
+                },
+                "usedServiceToken": {
+                    "type": "integer"
+                }
+            }
+        },
+        "service.PubKey": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.PurchaseInfo": {
+            "type": "object",
+            "properties": {
+                "movieInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.MovieInfo"
+                },
+                "priceInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.PriceInfo"
+                },
+                "ticketInfo": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.TicketInfo"
+                }
+            }
+        },
+        "service.ServiceTokenBalance": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "contractId": {
+                    "type": "string"
+                },
+                "decimals": {
+                    "type": "integer"
+                },
+                "imgUri": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "symbol": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Signature": {
+            "type": "object",
+            "properties": {
+                "pubKey": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.PubKey"
+                },
+                "signature": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.TicketInfo": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "sit": {
+                    "type": "string"
+                },
+                "theater": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Transaction": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "gasUsed": {
+                    "type": "integer"
+                },
+                "gasWanted": {
+                    "type": "integer"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "index": {
+                    "type": "integer"
+                },
+                "logs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Log"
+                    }
+                },
+                "raw_log": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "tx": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.Tx"
+                },
+                "txhash": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.TransferRequestResult": {
+            "type": "object",
+            "properties": {
+                "redirectUri": {
+                    "type": "string"
+                },
+                "requestSessionToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "service.Tx": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.TxValue"
+                }
+            }
+        },
+        "service.TxValue": {
+            "type": "object",
+            "properties": {
+                "fee": {
+                    "type": "object",
+                    "$ref": "#/definitions/service.Fee"
+                },
+                "memo": {
+                    "type": "string"
+                },
+                "msg": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Message"
+                    }
+                },
+                "signatures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/service.Signature"
+                    }
+                }
+            }
+        },
+        "service.UserInfo": {
+            "type": "object",
+            "properties": {
+                "walletAddress": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

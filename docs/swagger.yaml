@@ -1,0 +1,659 @@
+basePath: /api/v0
+definitions:
+  config.APIConfig:
+    properties:
+      apiKey:
+        type: string
+      apiSecret:
+        type: string
+      channel-id:
+        type: string
+      channelSecret:
+        type: string
+      endpoint:
+        type: string
+      fungibleTokenType:
+        type: string
+      itemContract-id:
+        type: string
+      lbd-api-endpoint:
+        type: string
+      line-api-endpoint:
+        type: string
+      lineAccessEndpoint:
+        type: string
+      non-fungibleTokenType:
+        type: string
+      serviceContract-id:
+        type: string
+      user-id:
+        type: string
+      walletAddress:
+        type: string
+      walletSecret:
+        type: string
+    type: object
+  controller.BaseCoinBalance:
+    properties:
+      coinInfo:
+        $ref: '#/definitions/service.BaseCoinBalance'
+        type: object
+      transactions:
+        items:
+          $ref: '#/definitions/service.Transaction'
+        type: array
+      userInfo:
+        $ref: '#/definitions/service.UserInfo'
+        type: object
+    type: object
+  controller.MovieDiscountBalance:
+    properties:
+      tokenInfo:
+        $ref: '#/definitions/service.FungibleBalance'
+        type: object
+      transactions:
+        items:
+          $ref: '#/definitions/service.Transaction'
+        type: array
+      userInfo:
+        $ref: '#/definitions/service.UserInfo'
+        type: object
+    type: object
+  controller.MovieTicketBalance:
+    properties:
+      amount:
+        type: integer
+      tokens:
+        items:
+          $ref: '#/definitions/controller.MovieTicketToken'
+        type: array
+    type: object
+  controller.MovieTicketToken:
+    properties:
+      movieInfo:
+        $ref: '#/definitions/service.MovieInfo'
+        type: object
+      name:
+        type: string
+      paymentInfo:
+        $ref: '#/definitions/service.PaymentInfo'
+        type: object
+      ticketInfo:
+        $ref: '#/definitions/service.TicketInfo'
+        type: object
+      tokenId:
+        type: string
+      transactions:
+        $ref: '#/definitions/service.NonFungibleTxHistory'
+        type: object
+    type: object
+  controller.MovieTokenBalance:
+    properties:
+      tokenInfo:
+        $ref: '#/definitions/service.ServiceTokenBalance'
+        type: object
+      transactions:
+        items:
+          $ref: '#/definitions/service.Transaction'
+        type: array
+      userInfo:
+        $ref: '#/definitions/service.UserInfo'
+        type: object
+    type: object
+  service.Amount:
+    properties:
+      amount:
+        type: integer
+      denom:
+        type: string
+    type: object
+  service.Attribute:
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+    type: object
+  service.BaseCoinBalance:
+    properties:
+      amount:
+        type: string
+      decimals:
+        type: integer
+      symbol:
+        type: string
+    type: object
+  service.Event:
+    properties:
+      attributes:
+        items:
+          $ref: '#/definitions/service.Attribute'
+        type: array
+      type:
+        type: string
+    type: object
+  service.Fee:
+    properties:
+      amount:
+        items:
+          $ref: '#/definitions/service.Amount'
+        type: array
+      gas:
+        type: integer
+    type: object
+  service.FungibleBalance:
+    properties:
+      amount:
+        type: string
+      meta:
+        type: string
+      name:
+        type: string
+      tokenType:
+        type: string
+    type: object
+  service.Log:
+    properties:
+      events:
+        items:
+          $ref: '#/definitions/service.Event'
+        type: array
+      log:
+        type: string
+      msg_index:
+        type: integer
+      success:
+        type: boolean
+    type: object
+  service.Message:
+    properties:
+      type:
+        type: string
+      value:
+        type: object
+    type: object
+  service.MovieInfo:
+    properties:
+      country:
+        type: string
+      genre:
+        type: string
+      runningTime:
+        type: integer
+      score:
+        type: number
+      title:
+        type: string
+      year:
+        type: integer
+    type: object
+  service.NonFungibleTxHistory:
+    properties:
+      mintTransaction:
+        $ref: '#/definitions/service.Transaction'
+        type: object
+      paymentTransaction:
+        $ref: '#/definitions/service.Transaction'
+        type: object
+      pointTransaction:
+        $ref: '#/definitions/service.Transaction'
+        type: object
+    type: object
+  service.PaymentInfo:
+    properties:
+      paymentDate:
+        type: string
+      paymentTransaction:
+        type: string
+      pointTransaction:
+        type: string
+    type: object
+  service.PriceInfo:
+    properties:
+      discount:
+        type: integer
+      grandTotal:
+        type: integer
+      subTotal:
+        type: integer
+      usedFungible:
+        type: integer
+      usedServiceToken:
+        type: integer
+    type: object
+  service.PubKey:
+    properties:
+      type:
+        type: string
+      value:
+        type: string
+    type: object
+  service.PurchaseInfo:
+    properties:
+      movieInfo:
+        $ref: '#/definitions/service.MovieInfo'
+        type: object
+      priceInfo:
+        $ref: '#/definitions/service.PriceInfo'
+        type: object
+      ticketInfo:
+        $ref: '#/definitions/service.TicketInfo'
+        type: object
+    type: object
+  service.ServiceTokenBalance:
+    properties:
+      amount:
+        type: string
+      contractId:
+        type: string
+      decimals:
+        type: integer
+      imgUri:
+        type: string
+      name:
+        type: string
+      symbol:
+        type: string
+    type: object
+  service.Signature:
+    properties:
+      pubKey:
+        $ref: '#/definitions/service.PubKey'
+        type: object
+      signature:
+        type: string
+    type: object
+  service.TicketInfo:
+    properties:
+      date:
+        type: string
+      price:
+        type: integer
+      sit:
+        type: string
+      theater:
+        type: string
+    type: object
+  service.Transaction:
+    properties:
+      code:
+        type: integer
+      gasUsed:
+        type: integer
+      gasWanted:
+        type: integer
+      height:
+        type: integer
+      index:
+        type: integer
+      logs:
+        items:
+          $ref: '#/definitions/service.Log'
+        type: array
+      raw_log:
+        type: string
+      timestamp:
+        type: string
+      tx:
+        $ref: '#/definitions/service.Tx'
+        type: object
+      txhash:
+        type: string
+    type: object
+  service.TransferRequestResult:
+    properties:
+      redirectUri:
+        type: string
+      requestSessionToken:
+        type: string
+    type: object
+  service.Tx:
+    properties:
+      type:
+        type: string
+      value:
+        $ref: '#/definitions/service.TxValue'
+        type: object
+    type: object
+  service.TxValue:
+    properties:
+      fee:
+        $ref: '#/definitions/service.Fee'
+        type: object
+      memo:
+        type: string
+      msg:
+        items:
+          $ref: '#/definitions/service.Message'
+        type: array
+      signatures:
+        items:
+          $ref: '#/definitions/service.Signature'
+        type: array
+    type: object
+  service.UserInfo:
+    properties:
+      walletAddress:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is sample dapp to provide trials of LBD service
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Link Cinema API
+  version: "0.1"
+paths:
+  /test/config:
+    get:
+      consumes:
+      - application/json
+      description: Show a config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Server Configuration
+          schema:
+            $ref: '#/definitions/config.APIConfig'
+      summary: Show a config
+      tags:
+      - test
+  /test/init:
+    get:
+      consumes:
+      - application/json
+      description: Transfer tokens to user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: transaction hashes has executed
+          schema:
+            items:
+              type: string
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Init asset for test user
+      tags:
+      - test
+  /test/transaction:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a Transaction using its hash
+      parameters:
+      - description: Transaction hash used for searching
+        in: query
+        name: txhash
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction with the provided hash
+          schema:
+            $ref: '#/definitions/service.Transaction'
+      summary: Get a transaction
+      tags:
+      - test
+  /ticket:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a purchase info about given movie ticket
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Ticket info
+          schema:
+            $ref: '#/definitions/service.PurchaseInfo'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get a purchase info
+      tags:
+      - ticket
+  /ticket/purchase:
+    post:
+      consumes:
+      - application/json
+      description: Request user to transfer token at LBW
+      parameters:
+      - description: Purchase info
+        in: body
+        name: purchase_info
+        required: true
+        schema:
+          $ref: '#/definitions/service.PurchaseInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session token and redirect url to transfer token
+          schema:
+            $ref: '#/definitions/service.TransferRequestResult'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Request user to purchase
+      tags:
+      - ticket
+  /ticket/purchase/commit/{baseCoinTransferToken}/{:movieTokenTransferToken}:
+    post:
+      consumes:
+      - application/json
+      description: Commit transactions to purchase movie-ticket token and mint a movie-ticket token to user wallet
+      parameters:
+      - description: Purchase info
+        in: body
+        name: purchase_info
+        required: true
+        schema:
+          $ref: '#/definitions/service.PurchaseInfo'
+      - description: Base coin transfer session Token
+        in: path
+        name: baseCoinTransferToken
+        required: true
+        type: string
+      - description: Base coin transfer session Token
+        in: path
+        name: movieTokenTransferToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction hashes has executed
+          schema:
+            items:
+              type: string
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Commit a purchasing movie-ticket token
+      tags:
+      - ticket
+  /ticket/purchase/extra:
+    post:
+      consumes:
+      - application/json
+      description: Request user to transfer movie-token used for discounting ticket price
+      parameters:
+      - description: Purchase info
+        in: body
+        name: purchase_info
+        required: true
+        schema:
+          $ref: '#/definitions/service.PurchaseInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session token and redirect url to transfer a token
+          schema:
+            $ref: '#/definitions/service.TransferRequestResult'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Request user to purchase extra token
+      tags:
+      - ticket
+  /token/balance/base-coin:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a base coin balance and summary by user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Base coin balance and summary by user
+          schema:
+            $ref: '#/definitions/controller.BaseCoinBalance'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get a base coin balance
+      tags:
+      - token
+  /token/balance/movie:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a movie token balance and summary by user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Movie token balance and summary by user
+          schema:
+            $ref: '#/definitions/controller.MovieTokenBalance'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get a movie token balance
+      tags:
+      - token
+  /token/balance/movie-discount:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a movie-discount token balance and summary by user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Movie-Discount token and summary by user
+          schema:
+            items:
+              $ref: '#/definitions/controller.MovieDiscountBalance'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get a movie-discount token balance
+      tags:
+      - token
+  /token/balance/movie-ticket:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve movie-ticket token balance and summary using its token index
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Movie-ticket token balance and summary with provided token index
+          schema:
+            $ref: '#/definitions/controller.MovieTicketBalance'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get a movie-ticket token balance
+      tags:
+      - token
+  /user/login:
+    get:
+      consumes:
+      - application/json
+      description: retrieve URL to login through LINE
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: URL to redirect login page
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Login to LINE
+      tags:
+      - user
+  /user/proxy:
+    get:
+      consumes:
+      - application/json
+      description: Request user to set proxy to delegate managing item tokens by service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session token and redirect url to set proxy
+          schema:
+            $ref: '#/definitions/service.TransferRequestResult'
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Request user to set proxy
+      tags:
+      - user
+  /user/proxy/commit/{proxyToken}:
+    get:
+      consumes:
+      - application/json
+      description: Commit a request of setting proxy
+      parameters:
+      - description: Proxy session token
+        in: path
+        name: proxyToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Transaction hash has executed
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Commit a request of setting proxy
+      tags:
+      - user
+swagger: "2.0"
