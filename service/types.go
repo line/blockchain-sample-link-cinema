@@ -108,7 +108,7 @@ type BaseCoinBalance struct {
 
 type Transaction struct {
 	Height    uint64 `json:"height"`
-	TxHash    string `json:"txhash"`
+	TxHash    TxHash `json:"txhash"`
 	Index     int    `json:"index"`
 	Code      int    `json:"code"`
 	RawLog    string `json:"raw_log"`
@@ -116,7 +116,7 @@ type Transaction struct {
 	GasWanted uint64 `json:"gasWanted"`
 	GasUsed   uint64 `json:"gasUsed"`
 	Tx        Tx     `json:"tx"`
-	Timestamp string `json:"timestamp"`
+	Timestamp uint64 `json:"timestamp"`
 }
 
 type Log struct {
@@ -139,6 +139,11 @@ type Attribute struct {
 type Tx struct {
 	Type  string  `json:"type"`
 	Value TxValue `json:"value"`
+}
+
+type TxHash struct {
+	Empty bool   `json:"empty"`
+	Value string `json:"value"`
 }
 
 type TxValue struct {
