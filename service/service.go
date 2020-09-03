@@ -35,13 +35,13 @@ func checkUrlParam(params ...string) bool {
 	for _, param := range params {
 		matched, err := regexp.MatchString("^[a-zA-Z0-9-_=]*$", param)
 		if err != nil {
-			return false
+			return true
 		}
 		if len(param) == 0 || !matched {
-			return false
+			return true
 		}
 	}
-	return true
+	return false
 }
 
 func GetUserInfo(userID string) (*UserInfo, error) {
